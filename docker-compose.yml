@@ -1,0 +1,63 @@
+services:
+    loggerapi-apache:
+        build:
+            context: ./
+            dockerfile: docker/apache/Dockerfile
+        restart: always
+        ports:
+            - "80:80"
+        environment:
+            - APP_URL=${APP_URL}
+        volumes:
+            - ./src:/var/www/html
+            - ./docker/apache/vhost.conf:/etc/apache2/sites-enabled/000-default.conf
+
+    loggerapi-node:
+        container_name: loggerapi-node
+        restart: always
+        build:
+            context: ./
+            dockerfile: ./docker/node/Dockerfile
+        command: tail -f /dev/null
+        stop_signal: SIGKILL
+
+    loggerapi-mariadb:
+        image: mariadb:latest
+        restart: always
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+        volumes:
+            - ./mariadb:/var/lib/mysql
+            - ${PWD}/database:/database
+            - ./docker/mariadb/my.cnf:/etc/mysql/my.cnf:ro
+
+    loggerapi-phpmyadmin:
+        restart: always
+        image: phpmyadmin/phpmyadmin:latest
+        depends_on:
+            - loggerapi-mariadb
+        ports:
+            - "8181:80"
+        environment:
+            PMA_HOST: ${DB_HOST}
+            PMA_USER: ${DB_USERNAME}
+            PMA_PASSWORD: ${DB_PASSWORD}
+
+    loggerapi-redis:
+        image: redis:latest
+        restart: always
+        healthcheck:
+            test: [ "CMD", "redis-cli", "ping" ]
+            interval: 5s
+            timeout: 3s
+            retries: 3
+            start_period: 10s
+
+volumes:
+    mariadb:
+        external: false
