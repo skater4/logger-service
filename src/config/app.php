@@ -1,6 +1,7 @@
 <?php
 
 use App\Providers\API\ApiAuthServiceProvider;
+use App\Providers\API\LoggerServiceProvider;
 use Illuminate\Support\Facades\Facade;
 
 return [
@@ -199,7 +200,8 @@ return [
         /*
          * Custom providers
          */
-        ApiAuthServiceProvider::class
+        ApiAuthServiceProvider::class,
+        LoggerServiceProvider::class
     ],
 
     /*

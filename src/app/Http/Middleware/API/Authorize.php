@@ -24,7 +24,9 @@ class Authorize
     public function handle(Request $request, Closure $next): Application|ResponseFactory|Response|RedirectResponse|JsonResponse
     {
         if (!resolve(ApiAuthInterface::class)->auth($request)) {
-            return response('', ResponseAlias::HTTP_UNAUTHORIZED);
+            return response([
+                'error' => 'Incorrect auth data'
+            ], ResponseAlias::HTTP_UNAUTHORIZED);
         }
 
         return $next($request);

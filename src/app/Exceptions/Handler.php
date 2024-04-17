@@ -3,6 +3,10 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -46,5 +50,22 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    /**
+     * @param $request
+     * @param Throwable $e
+     * @return Response|JsonResponse|ResponseAlias
+     * @throws Throwable
+     */
+    public function render($request, Throwable $e): Response|JsonResponse|ResponseAlias
+    {
+        if ($e instanceof MethodNotAllowedHttpException) {
+            return response()->json([
+                'error' => 'Method Not Allowed'
+            ], ResponseAlias::HTTP_METHOD_NOT_ALLOWED);
+        }
+
+        return parent::render($request, $e);
     }
 }

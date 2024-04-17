@@ -28,8 +28,8 @@ class LogRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'client' => 'required|string',
-            'message' => 'required|string',
+            'client' => 'required|string|max:255',
+            'message' => 'required|string|max:2048',
             'level' => 'required|string|in:' . implode(',', array_column(Levels::cases(), 'value')),
             'user_id' => 'nullable|integer|exists:users,id'
         ];
