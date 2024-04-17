@@ -25,3 +25,7 @@ make composer-install
 ```bash
 make npm-install
 ```
+В env в проекте прописываем токен
+```bash
+ACCESS_TOKEN=access_token
+```
