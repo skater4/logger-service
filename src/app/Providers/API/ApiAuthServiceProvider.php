@@ -16,7 +16,7 @@ class ApiAuthServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(ApiAuthInterface::class, function (Application $app) {
+        $this->app->bind(ApiAuthInterface::class, function (Application $app) {
             return new TokenAuth(
                 $app['config']['auth']['api_token']
             );

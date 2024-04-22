@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\API\V1\LoggerController;
+use App\Http\Controllers\API\V1\LogsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,9 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'v1'], function () {
-    Route::group(['prefix' => '/logger'], function () {
-        Route::post('/add', [LoggerController::class, 'add'])->name('v1.logger.add');
-        Route::get('/get', [LoggerController::class, 'get'])->name('v1.logger.get');
-    });
+Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
+    Route::apiResource('logs', LogsController::class)
+        ->only(['index', 'store'])
+        ->names([
+            'index' => 'logs.index',
+            'store' => 'logs.store'
+        ]);
 });

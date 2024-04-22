@@ -2,13 +2,15 @@
 
 namespace App\Services\Logger\Interfaces;
 
+use App\Models\Log\DTO\LogData;
+
 interface LoggerInterface
 {
     /**
-     * @param array $data
+     * @param LogData $logData
      * @return void
      */
-    public function addLog(array $data): void;
+    public function addLog(LogData $logData): void;
 
     /**
      * @return array

@@ -12,6 +12,13 @@ class LogResource extends JsonResource
      */
     public function toArray($request): array
     {
-        return $this->resource;
+        return [
+            'id'          => $this->resource->id,
+            'created_at'  => $this->resource->created_at,
+            'client'      => $this->resource->client,
+            'message'     => $this->resource->message,
+            'level'       => $this->resource->level,
+            'user_id'     => $this->resource->user_id ?? null,
+        ];
     }
 }

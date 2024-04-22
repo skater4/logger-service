@@ -10,10 +10,6 @@ class LoggerServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        $this->app->singleton(LoggerInterface::class, function () {
-            return new CsvLogger(
-                public_path() . '/csv'
-            );
-        });
+        $this->app->singleton(LoggerInterface::class, CsvLogger::class);
     }
 }
